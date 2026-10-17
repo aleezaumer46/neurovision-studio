@@ -5,7 +5,7 @@
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-const API_BASE = 'http://localhost:8000';
+export const API_BASE = 'https://neurovision-backend-gpcf.onrender.com';
 
 export class AnalyticsDashboard {
   constructor() {

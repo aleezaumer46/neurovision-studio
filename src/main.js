@@ -18,7 +18,7 @@ import { PipelineVisualizer } from './ui/pipelineVisualizer.js';
 import { batchProcessor } from './ui/batchProcessor.js';
 import { augmentationStudio } from './ui/augmentationStudio.js';
 import { voiceSynthesizer } from './ui/voiceSynthesizer.js';
-import { analyticsDashboard } from './ui/analyticsDashboard.js';
+import { analyticsDashboard, API_BASE } from './ui/analyticsDashboard.js';
 import { setupInfoModal } from './ui/infoModal.js';
 import { showToast } from './ui/toast.js';
 
@@ -892,7 +892,7 @@ async function bootstrap() {
   btnRefreshAnalytics?.addEventListener('click', refreshAnalyticsView);
   btnClearTelemetryLogs?.addEventListener('click', async () => {
     try {
-      await fetch('http://127.0.0.1:8000/api/clear-logs', { method: 'DELETE' });
+      await fetch(`${API_BASE}/api/clear-logs`, { method: 'DELETE' });
     } catch (e) {}
     localStorage.removeItem('neurovision_telemetry_logs');
     refreshAnalyticsView();
