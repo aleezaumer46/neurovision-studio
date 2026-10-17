@@ -1,0 +1,7 @@
+# Python Environment Dependencies for CNN Training & Browser Export
+# Compatible with Python 3.9 - 3.12
+tensorflow>=2.15.0
+numpy>=1.23.0
+pillow>=9.5.0
+matplotlib>=3.7.0
+scikit-learn>=1.2.0

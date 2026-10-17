@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroVision Studio Enterprise | Edge AI & XAI Suite</title>
+  <meta name="description" content="Production-Grade Client-Side Computer Vision, Edge AI & Explainable AI (XAI) Suite powered by TensorFlow.js, WebGL acceleration, and FastAPI telemetry." />
+  <meta name="author" content="Aleeza Umer (BSAI)" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#06b6d4" />
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <!-- SVG Gradient Definitions -->
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="cyanPurpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#06b6d4" />
+        <stop offset="50%" stop-color="#3b82f6" />
+        <stop offset="100%" stop-color="#8b5cf6" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="brand-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            <circle cx="12" cy="12" r="3"/>
+            <path d="m4.93 4.93 4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            <span>NeuroVision</span><span class="gradient-text">Studio Enterprise</span>
+          </div>
+          <div class="brand-subtitle">
+            <span>Edge AI & XAI Systems Suite</span>
+            <span class="badge-student">Aleeza Umer | BSAI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Unified Model Selector Pills -->
+      <div class="model-selector-bar" role="group" aria-label="Model Selection">
+        <button id="pillMobilenet" class="model-pill-btn active" data-model="mobilenet" title="1000-class ImageNet CNN">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          MobileNetV2 (1000 Class)
+        </button>
+        <button id="pillCustomCnn" class="model-pill-btn" data-model="custom_cnn" title="10-class Travel & Transportation Vehicle CNN">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+          Vehicle Vision CNN (10 Class)
+        </button>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="header-actions">
+        <!-- Voice Accessibility Toggle (Audio Synthesizer) -->
+        <button id="btnVoiceToggle" class="btn-voice" title="Voice Accessibility Assistant">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span id="voiceStatusText">Voice: Off</span>
+        </button>
+
+        <!-- Hardware Acceleration Status -->
+        <div id="backendPill" class="backend-pill" title="Hardware Acceleration Status">
+          <span class="pulse-dot"></span>
+          <span id="headerBackendText">WebGL 2.0 (GPU)</span>
+        </div>
+
+        <!-- PWA Install Trigger -->
+        <button id="btnPwaInstall" class="btn-icon" title="Install App to Desktop/Mobile" style="display: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+
+        <!-- Architecture & Documentation Modal Trigger -->
+        <button id="btnOpenInfo" class="btn-icon" title="Architecture & Model Info" aria-label="Architecture and Model Info">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="btnThemeToggle" class="btn-icon" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Four-workspace navigation -->
+  <nav class="enterprise-nav-bar" aria-label="Enterprise Navigation">
+    <div class="enterprise-nav-inner">
+      <button class="studio-tab-btn active" data-page="page1">
+        <span>🚀</span> Vision Hub
+      </button>
+      <button class="studio-tab-btn" data-page="page2">
+        <span>🔬</span> Explainable AI (XAI)
+      </button>
+      <button class="studio-tab-btn" data-page="page3">
+        <span>🧠</span> Teachable & Similarity
+      </button>
+      <button class="studio-tab-btn" data-page="page4">
+        <span>📊</span> Batch & Telemetry
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content View Container -->
+  <main class="app-main">
+    <!-- Real-Time Metrics Banner -->
+    <section class="project-banner">
+      <div class="banner-content">
+        <h2>
+          <span>NeuroVision Studio Enterprise</span>
+          <span style="font-size: 0.85rem; font-weight: 500; color: var(--accent-cyan);">Edge AI Core v2.0</span>
+        </h2>
+        <p>100% In-Browser Edge Computing via TensorFlow.js & WebGL Shaders. Zero Server Transmission Delay.</p>
+      </div>
+      <div class="banner-stats">
+        <div class="stat-item">
+          <div class="stat-value" id="bannerStatLatency">~18 ms</div>
+          <div class="stat-label">Inference Latency</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" style="color: var(--accent-emerald);">0 ms</div>
+          <div class="stat-label">Server Delay</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" style="color: var(--accent-purple);">100%</div>
+          <div class="stat-label">Privacy Preserved</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 1: INFERENCE & MULTI-OBJECT DETECTION HUB                            -->
+    <!-- ========================================================================= -->
+    <div id="page1" class="module-view active">
+      <div class="dashboard-grid">
+        <!-- Left: Input & Webcam Scanner -->
+        <div class="dashboard-left">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Input Modalities & Controls</div>
+              <div id="activeModelBadge" class="badge-student">MobileNetV2 Active</div>
+            </div>
+
+            <!-- Input Tabs -->
+            <div class="input-tabs" role="tablist">
+              <button id="tabBtnUpload" class="tab-btn active" role="tab" aria-selected="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Upload / Drag & Drop
+              </button>
+              <button id="tabBtnWebcam" class="tab-btn" role="tab" aria-selected="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 7l-7 5 7 5V7z"></path>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+                Live Camera Scanner
+              </button>
+            </div>
+
+            <!-- Upload View -->
+            <div id="uploadView">
+              <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload Image by Drag and Drop or Browse">
+                <input type="file" id="fileInput" class="file-input-hidden" accept="image/jpeg,image/png,image/webp,image/bmp" />
+                <div class="dropzone-icon">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <div class="dropzone-title">Drag & Drop Image Here</div>
+                <div class="dropzone-hint">Supports JPEG, PNG, WEBP, BMP (Max 15 MB)</div>
+                <button type="button" class="btn-browse" id="btnBrowseTrigger">Browse From Device</button>
+              </div>
+
+              <!-- Preset Benchmark Samples -->
+              <div class="samples-section">
+                <div class="samples-label">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                  Instant Benchmark Samples (1-Click Run)
+                </div>
+                <div class="samples-grid" id="sampleGalleryContainer"></div>
+              </div>
+            </div>
+
+            <!-- Webcam Scanner View -->
+            <div id="webcamView" class="webcam-container">
+              <div class="webcam-feed-wrapper">
+                <video id="webcamVideo" autoplay playsinline muted></video>
+                <canvas id="webcamDetectionCanvas" class="overlay-canvas webcam-detection-canvas"></canvas>
+                <div class="webcam-overlay">
+                  <div style="color: rgba(6, 182, 212, 0.7); font-size: 0.8rem; font-weight: 600; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px;">
+                    Target Focus Reticle
+                  </div>
+                </div>
+              </div>
+              <div class="webcam-controls">
+                <button id="btnToggleCamera" class="btn btn-primary" style="flex: 1;">
+                  <span>Start Live Inference</span>
+                </button>
+                <button id="btnSnapshotCamera" class="btn btn-secondary" style="flex: 1;" disabled>
+                  Freeze Frame
+                </button>
+              </div>
+            </div>
+
+            <!-- Inference mode controls -->
+            <div class="pipeline-spec-box" style="margin-top: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">Inference mode</span>
+                <span id="detConfVal" style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">50%</span>
+              </div>
+              <div class="input-tabs" role="group" aria-label="Inference mode">
+                <button id="modeClassification" class="tab-btn active" type="button" aria-pressed="true">Image Classification</button>
+                <button id="modeDetection" class="tab-btn" type="button" aria-pressed="false">Object Detection (COCO-SSD)</button>
+              </div>
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span>Confidence Threshold</span>
+                </div>
+                <input type="range" id="sliderDetConf" class="studio-range" min="15" max="95" value="50" />
+              </div>
+              <button id="btnRunDetection" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; display: none;">
+                Detect Objects in Image
+              </button>
+              <div id="detectionSummaryText" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                Awaiting detection run...
+              </div>
+              <ul id="detectedObjectsList" style="list-style: none; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 4px;"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Preview, Vectors & Verdict -->
+        <div class="dashboard-right">
+          <div class="card" id="previewCard">
+            <div class="card-header">
+              <div class="card-title">Media Preview & Vector Overlay</div>
+              <div class="card-actions">
+                <button id="btnClearAll" class="btn-icon" title="Clear / Reset State">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Frame with Canvas Overlay -->
+            <div class="preview-box" id="previewBox">
+              <div class="scan-laser" id="scanLaser"></div>
+              <div class="preview-badge-overlay" id="previewBadgeOverlay" style="display: none;">
+                <span class="preview-badge" id="previewDimensionsBadge">-- × --</span>
+                <span class="preview-badge" id="previewSizeBadge">-- KB</span>
+              </div>
+              <div id="previewPlaceholder" class="preview-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.4;">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <div style="font-weight: 600; color: var(--text-muted);">No image selected yet</div>
+              </div>
+              <!-- Base Image and Overlaid Vector Canvas -->
+              <div class="canvas-overlay-container">
+                <img id="mainPreviewImg" class="preview-img" style="display: none;" alt="Preview" />
+                <canvas id="detectionCanvas" class="overlay-canvas"></canvas>
+              </div>
+            </div>
+
+            <!-- Hero Verdict Card -->
+            <div class="prediction-hero-card" id="heroPredictionCard">
+              <div class="prediction-main">
+                <div class="prediction-label-tag">CNN Classification Verdict</div>
+                <div class="prediction-title" id="predictedClassTitle">Awaiting Input...</div>
+                <div class="prediction-meta">
+                  <span class="meta-pill"><span id="statLatencyVal">-- ms</span></span>
+                  <span>•</span>
+                  <span class="meta-pill"><span id="statFpsVal">-- FPS</span></span>
+                  <span>•</span>
+                  <span id="confQualitativeLevel" style="font-weight: 600; color: var(--accent-cyan);">Ready</span>
+                </div>
+              </div>
+              <!-- Radial Meter -->
+              <div class="confidence-radial">
+                <svg class="confidence-svg" viewBox="0 0 100 100">
+                  <circle class="confidence-bg-circle" cx="50" cy="50" r="40"></circle>
+                  <circle id="confidenceProgressCircle" class="confidence-progress-circle" cx="50" cy="50" r="40"></circle>
+                </svg>
+                <div class="confidence-text-inside">
+                  <span id="confidencePctVal">0%</span>
+                  <span class="confidence-text-sub">Confidence</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Multi-Class Distribution -->
+            <div class="probabilities-card">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem;">
+                <div style="font-size: 0.85rem; font-weight: 700;">Top Class Probability Distribution</div>
+                <button id="btnToggleAllClasses" class="btn-icon" style="width: auto; height: auto; padding: 4px 10px; font-size: 0.72rem; border-radius: var(--radius-full);">
+                  Show All Classes
+                </button>
+              </div>
+              <div class="prob-list" id="probabilityDistributionList"></div>
+            </div>
+
+            <div class="action-controls-bar">
+              <button id="btnRunInference" class="btn btn-primary">Re-Run Inference</button>
+              <button id="btnExportReport" class="btn btn-secondary">Export JSON Report</button>
+              <button id="btnCopyResult" class="btn btn-secondary">Copy Result</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 2: EXPLAINABLE AI (XAI) & SEMANTIC LAB                               -->
+    <!-- ========================================================================= -->
+    <div id="page2" class="module-view">
+      <div class="dashboard-grid">
+        <!-- Left: Grad-CAM and Semantic Segmentation Controls -->
+        <div>
+          <!-- Grad-CAM Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔥 Grad-CAM (Gradient Class Activation)</div>
+              <span class="badge-student">Vehicle CNN · Jet/Turbo</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.75rem;">
+              Computes target-class gradients against the Vehicle CNN's final convolutional activations to isolate decision regions.
+            </p>
+            <div class="slider-group">
+              <div class="slider-header">
+                <span>Thermal Heatmap Opacity</span>
+                <span id="gradCamOpacityVal">65%</span>
+              </div>
+              <input type="range" id="sliderGradCamOpacity" class="studio-range" min="0" max="100" value="65" />
+            </div>
+            <button id="btnRunGradCam" class="btn btn-primary" style="width: 100%;">
+              Generate Grad-CAM Heatmap
+            </button>
+            <div style="display: flex; justify-content: center; margin-top: 1rem; background: #000; padding: 0.5rem; border-radius: var(--radius-md);">
+              <canvas id="gradCamCanvas" width="224" height="224" style="border-radius: var(--radius-sm); max-width: 100%;"></canvas>
+            </div>
+          </div>
+
+          <!-- Semantic Segmentation Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">✂️ Semantic Segmentation & Compositing</div>
+              <span class="badge-student">Pixel-Wise Saliency</span>
+            </div>
+            <div class="input-tabs" style="margin-bottom: 0.85rem;">
+              <button class="tab-btn active" id="segModeBlur">Bokeh Blur</button>
+              <button class="tab-btn" id="segModeRemove">Remove BG</button>
+              <button class="tab-btn" id="segModeChroma">Chroma Key</button>
+            </div>
+            <div class="slider-group" id="segBlurControls">
+              <div class="slider-header">
+                <span>Blur Radius</span>
+                <span id="segBlurVal">12 px</span>
+              </div>
+              <input type="range" id="sliderSegBlur" class="studio-range" min="2" max="30" value="12" />
+            </div>
+            <button id="btnApplySegmentation" class="btn btn-primary" style="width: 100%;">
+              Apply Segmentation Effect
+            </button>
+            <div style="display: flex; justify-content: center; margin-top: 1rem; background: #000; padding: 0.5rem; border-radius: var(--radius-md);">
+              <canvas id="segmentationCanvas" style="border-radius: var(--radius-sm); max-width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 4-Stage CNN Feature Pipeline Inspector -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔬 4-Stage CNN Feature Pipeline Inspector</div>
+              <span class="badge-student">Direct Tensor Layer Outputs</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+              Live canvas rendering of internal convolutional transformation stages from raw RGB to Global Average Pooling.
+            </p>
+            <div class="pipeline-steps-wrapper" style="grid-template-columns: repeat(2, 1fr);">
+              <!-- Stage 1 -->
+              <div class="pipeline-step-item">
+                <span class="pipeline-step-num">Stage 1</span>
+                <span class="pipeline-step-title">Normalized Tensor</span>
+                <span class="pipeline-step-desc">Resized 224x224x3 & [0.0, 1.0] Float32 tensor</span>
+                <canvas id="pipelinePreprocessedCanvas" class="pipeline-visual-canvas" width="224" height="224"></canvas>
+              </div>
+              <!-- Stage 2 -->
+              <div class="pipeline-step-item">
+                <span class="pipeline-step-num">Stage 2</span>
+                <span class="pipeline-step-title">Conv2D Spatial Filters</span>
+                <span class="pipeline-step-desc">3x3 spatial edge, wheel & contour extraction</span>
+                <canvas id="pipelineEdgeCanvas" class="pipeline-visual-canvas" width="112" height="112"></canvas>
+              </div>
+              <!-- Stage 3 -->
+              <div class="pipeline-step-item">
+                <span class="pipeline-step-num">Stage 3</span>
+                <span class="pipeline-step-title">Activation Map</span>
+                <span class="pipeline-step-desc">Mid-level ReLU activation responses</span>
+                <canvas id="pipelineActivationCanvas" class="pipeline-visual-canvas" width="112" height="112"></canvas>
+              </div>
+              <!-- Stage 4 -->
+              <div class="pipeline-step-item">
+                <span class="pipeline-step-num">Stage 4</span>
+                <span class="pipeline-step-title">Dense Feature Activations</span>
+                <span class="pipeline-step-desc">Hidden-layer response before the classifier</span>
+                <canvas id="pipelineDeepCanvas" class="pipeline-visual-canvas" width="112" height="112"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 3: TEACHABLE STUDIO & VECTOR SIMILARITY ENGINE                       -->
+    <!-- ========================================================================= -->
+    <div id="page3" class="module-view">
+      <div class="dashboard-grid">
+        <!-- Teachable Studio Transfer Learning -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🧠 In-Browser Transfer Learning ("Teachable Studio")</div>
+            <span class="badge-student">MobileNet Embeddings + KNN Classifier</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+            Extract 1024-d latent embeddings from the bottleneck layer of MobileNetV2 and train a client-side KNN classifier on user-defined classes in milliseconds.
+          </p>
+          <div class="teachable-classes-grid">
+            <div class="teachable-class-card">
+              <input class="teachable-class-name" data-class-id="0" aria-label="Class A name" value="Class A" />
+              <div class="sample-count-badge" id="teachableCount0">0 Samples</div>
+              <button class="btn btn-secondary btn-capture-sample" data-class-id="0" style="width: 100%;">
+                + Capture Sample
+              </button>
+            </div>
+            <div class="teachable-class-card">
+              <input class="teachable-class-name" data-class-id="1" aria-label="Class B name" value="Class B" />
+              <div class="sample-count-badge" id="teachableCount1">0 Samples</div>
+              <button class="btn btn-secondary btn-capture-sample" data-class-id="1" style="width: 100%;">
+                + Capture Sample
+              </button>
+            </div>
+            <div class="teachable-class-card">
+              <input class="teachable-class-name" data-class-id="2" aria-label="Class C name" value="Class C" />
+              <div class="sample-count-badge" id="teachableCount2">0 Samples</div>
+              <button class="btn btn-secondary btn-capture-sample" data-class-id="2" style="width: 100%;">
+                + Capture Sample
+              </button>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+            <button id="btnTeachablePredict" class="btn btn-primary" style="flex: 1;">
+              Start Predicting
+            </button>
+            <button id="btnTeachableReset" class="btn btn-secondary">
+              Reset Dataset
+            </button>
+          </div>
+          <div id="teachableVerdictBox" class="pipeline-spec-box" style="margin-top: 1rem;">
+            <div style="font-weight: 700; font-size: 0.85rem;">KNN Real-Time Classification Output</div>
+            <div id="teachableVerdictText" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+              Awaiting class samples...
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Similarity Search -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🔍 Visual Similarity Search (Reverse Image Lookup)</div>
+            <span class="badge-student">GAP 1D Vector Cosine Distance</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+            Extracts normalized 1D vector embeddings from the GAP layer and computes live cosine similarity:
+            <span style="font-family: var(--font-mono); color: var(--accent-cyan);">cos(θ) = (q · r) / (||q|| ||r||)</span>
+          </p>
+          <button id="btnRunSimilarity" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">
+            Execute Similarity Search Against Gallery
+          </button>
+          <div class="samples-grid" id="similarityResultsGrid" style="grid-template-columns: repeat(3, 1fr); gap: 0.85rem;">
+            <div style="grid-column: span 3; text-align: center; color: var(--text-dim); padding: 2.5rem;">
+              Click button above to evaluate cosine similarity against indexed reference gallery.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 4: BATCH DATASET LAB & ADVERSARIAL PLAYGROUND                        -->
+    <!-- ========================================================================= -->
+    <div id="page4" class="module-view">
+      <div class="dashboard-grid">
+        <!-- Multi-File Batch Processor -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📁 Multi-File Batch Evaluation Studio</div>
+            <span class="badge-student">Up to 30 Images</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+            Drop folders or select multiple images to process inference asynchronously using micro-tasks without locking the UI main thread.
+          </p>
+          <input type="file" id="batchFileInput" multiple accept="image/*" class="file-input-hidden" />
+          <div id="batchDropTarget" class="batch-drop-target" tabindex="0">Drop up to 30 images here</div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button id="btnTriggerBatchSelect" class="btn btn-primary">Select Multiple Images</button>
+            <button id="btnExportBatchCSV" class="btn btn-secondary">Export CSV</button>
+            <button id="btnExportBatchJSON" class="btn btn-secondary">Export JSON</button>
+          </div>
+          <div id="batchProgressBarWrapper" style="display: none; margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+              <span>Processing Queue...</span>
+              <span id="batchProgressPctText">0%</span>
+            </div>
+            <div class="prob-track">
+              <div id="batchProgressBar" class="prob-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+          <div class="batch-table-container">
+            <table class="batch-table" id="batchResultsTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Thumb</th>
+                  <th>File</th>
+                  <th>Verdict</th>
+                  <th>Confidence</th>
+                  <th>Latency</th>
+                  <th>Model</th>
+                </tr>
+              </thead>
+              <tbody id="batchTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: var(--text-dim); padding: 1.5rem;">
+                    No batch queue processed yet. Click "Select Multiple Images" to start.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Adversarial Robustness & Image Augmentation Playground -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🎛️ Adversarial Robustness Playground</div>
+            <span class="badge-student">Real-Time Degradation Stress-Testing</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+            Perturb input tensors dynamically to observe how noise, contrast, and lighting variations impact CNN confidence and boundary uncertainty.
+          </p>
+          <div class="slider-group">
+            <div class="slider-header"><span>Gaussian Noise Injection</span><span id="valNoise">0%</span></div>
+            <input type="range" id="sliderNoise" class="studio-range" min="0" max="60" value="0" />
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><span>Contrast Scaling</span><span id="valContrast">100%</span></div>
+            <input type="range" id="sliderContrast" class="studio-range" min="30" max="180" value="100" />
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><span>Brightness Adjustment</span><span id="valBright">100%</span></div>
+            <input type="range" id="sliderBright" class="studio-range" min="20" max="180" value="100" />
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><span>Gaussian Blur Radius</span><span id="valBlur">0 px</span></div>
+            <input type="range" id="sliderBlur" class="studio-range" min="0" max="12" value="0" />
+          </div>
+          <div class="slider-group">
+            <div class="slider-header"><span>Rotation Degree</span><span id="valRot">0°</span></div>
+            <input type="range" id="sliderRot" class="studio-range" min="-180" max="180" value="0" />
+          </div>
+          <button id="btnResetAugmentation" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem;">
+            Reset Perturbations
+          </button>
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; border-radius: var(--radius-md); padding: 1rem; margin-top: 1rem;">
+            <canvas id="augmentationCanvas" width="224" height="224" style="border-radius: var(--radius-sm); max-width: 100%;"></canvas>
+            <div id="augVerdictBadge" style="margin-top: 0.85rem; font-weight: 700; color: var(--accent-cyan); font-size: 0.95rem;">
+              Evaluating perturbed tensor...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Telemetry for the Batch & Telemetry workspace -->
+    <div id="page4Telemetry" class="telemetry-panel">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 Edge Telemetry & FastAPI Analytics</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <span id="fastApiStatusBadge" class="badge-student" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3);">
+              FastAPI telemetry
+            </span>
+            <button id="btnRefreshAnalytics" class="btn-icon" title="Refresh Telemetry">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="project-banner" style="margin-bottom: 1.5rem;">
+          <div class="stat-item" style="text-align: left;">
+            <div class="stat-value" id="analyticTotalCount">0</div>
+            <div class="stat-label">Total Inferences Logged</div>
+          </div>
+          <div class="stat-item" style="text-align: left;">
+            <div class="stat-value" id="analyticAvgLatency" style="color: var(--accent-emerald);">0 ms</div>
+            <div class="stat-label">Average Edge Latency</div>
+          </div>
+          <div class="stat-item" style="text-align: left;">
+            <div class="stat-value" id="analyticTopCategory" style="color: var(--accent-purple);">--</div>
+            <div class="stat-label">Top Detected Category</div>
+          </div>
+          <div class="stat-item" style="text-align: left;">
+            <div class="stat-value" id="pwaStatusVal" style="color: var(--accent-cyan);">Offline Ready</div>
+            <div class="stat-label">Service Worker Cache</div>
+          </div>
+        </div>
+
+        <!-- Chart.js Dual Analytics Charts Grid -->
+        <div class="analytics-charts-grid">
+          <div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">Top Detected Classes Distribution</div>
+            <div class="analytics-chart-box">
+              <canvas id="analyticsDistributionChart"></canvas>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">Real-Time Latency Trends (ms)</div>
+            <div class="analytics-chart-box">
+              <canvas id="analyticsTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- PWA Controls Box -->
+        <div class="pipeline-spec-box" style="margin-top: 1.5rem;">
+          <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;">Progressive Web App (PWA) Offline Engine</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem;">
+            The application precaches all TensorFlow.js model topologies, binary weight shards, and sample assets. Once loaded, the suite operates 100% offline with zero network connectivity.
+          </p>
+          <div style="display: flex; gap: 0.75rem;">
+            <button id="btnTriggerPwaPrompt" class="btn btn-secondary">Install NeuroVision App</button>
+            <button id="btnClearTelemetryLogs" class="btn btn-secondary">Clear Telemetry Database</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Technical Information & Architecture Modal -->
+  <div id="infoModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Technical Architecture & Four-Workspace Documentation</div>
+        <button id="btnCloseInfo" class="btn-icon" aria-label="Close Modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <h3>NeuroVision Studio Enterprise — Four-Workspace System</h3>
+        <p>A unified Edge AI and Explainable AI suite running 100% client-side with optional asynchronous telemetry logging.</p>
+        <pre>Vision Hub: Classification, COCO-SSD detection, webcam, and speech
+      Explainable AI: Grad-CAM, segmentation, and a four-stage CNN inspector
+      Teachable & Similarity: KNN transfer learning and embedding search
+      Batch & Telemetry: Batch evaluation, FastAPI metrics, and Chart.js reports</pre>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <div><strong>NeuroVision Studio Enterprise</strong> — Four-Workspace Edge Computer Vision & Explainable AI Suite</div>
+      <div>Prepared for: <span style="color: var(--accent-cyan); font-weight: 600;">Aleeza Umer (BSAI)</span></div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "NeuroVision Studio Enterprise",
+  "short_name": "NeuroVision",
+  "description": "Enterprise-grade Client-Side Computer Vision & Deep Learning Suite with 0ms Server Delay",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070a13",
+  "theme_color": "#06b6d4",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/samples/sports_car.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/samples/sports_car.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
